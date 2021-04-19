@@ -1,8 +1,8 @@
 # TicTacToeGame
 
-Tic Tac Toe game build with React. 
+Tic Tac Toe game built with React. 
 
-You can build this by following this tutorial from the React official documentation available here: 
+You can build this project by following the tutorial available on the official React documentation website available here: 
 
 https://reactjs.org/tutorial/tutorial.html
 
