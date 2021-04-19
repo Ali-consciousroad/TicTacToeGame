@@ -2,35 +2,64 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+/*  The square components no longer maintain state.
+    The square components are now controlled components,
+    they are controlled by the board to be more precise. */
+
+    // Show the current state's value when clicked
+    // When setState is called inside a component, React automatically updates the child comp. inside of it too.
+
+/*
 class Square extends React.Component {
-
-    // Add a constructor to the class to initialize the state and remember when a square is clicked
-    constructor(props) {
-        // In JS classes, we need to always call "super" when defining the constructor of a sublclass
-        // All React component classes that have a constructor should start with a super(props) call.
-        super(props);
-        this.state = {
-            value: null,
-        };
-    } 
-
     render() {
       return (
-        // Show the current state's value when clicked
-        // Wen setState is called inside a component, React automatically updates the child comp. inside of it too.
-        <button className="square" 
-                onClick={() => this.setState({value: 'X'})}
+        
+        <button         
+            className="square" 
+            onClick={() => this.props.onClick()}
         >
-          {this.state.value}
+          {this.props.value}
         </button>
       );
     }
   }
-  
-  class Board extends React.Component {
+*/
+
+    // Replace the Square class with function components
+    // Simplier way to write class that don't have their own state
+    function Square(props) {
+        return(
+            <button className="square" onClick={props.onClick}>
+              {props.value}  
+            </button>
+        );
+    }
+
+    class Board extends React.Component {
+        // Add a new constructor to the board
+        constructor(props){
+            super(props);
+            this.state = {
+                squares: Array(9).fill(null),
+            };
+        }
+
+    // Define the handleClick method
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({squares: squares});
+    }
+
     renderSquare(i) {
       // Pass a prop value called square to the Square
-      return <Square value={i} />;
+      // Parthesis needed because of the multiple lines
+      return (
+        <Square 
+            value={this.state.squares[i]} 
+            onClick={() => this.handleClick(i)}
+        />
+      );
     }
   
     render() {
