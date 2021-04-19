@@ -3,11 +3,25 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
+
+    // Add a constructor to the class to initialize the state and remember when a square is clicked
+    constructor(props) {
+        // In JS classes, we need to always call "super" when defining the constructor of a sublclass
+        // All React component classes that have a constructor should start with a super(props) call.
+        super(props);
+        this.state = {
+            value: null,
+        };
+    } 
+
     render() {
       return (
-        <button className="square">
-          {/* Show the value */}
-          {this.props.value}
+        // Show the current state's value when clicked
+        // Wen setState is called inside a component, React automatically updates the child comp. inside of it too.
+        <button className="square" 
+                onClick={() => this.setState({value: 'X'})}
+        >
+          {this.state.value}
         </button>
       );
     }
