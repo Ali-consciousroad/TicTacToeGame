@@ -27,6 +27,7 @@ class Square extends React.Component {
 
     // Replace the Square class with function components
     // Simplier way to write class that don't have their own state
+    // this.props changed to props both times it appears
     function Square(props) {
         return(
             <button className="square" onClick={props.onClick}>
@@ -41,19 +42,30 @@ class Square extends React.Component {
             super(props);
             this.state = {
                 squares: Array(9).fill(null),
+                // Set "X" as the first move
+                xIsNext: true,
             };
         }
 
     // Define the handleClick method
+    /* update the Board's handleClick function to flip 
+       the value of xIsNext */
     handleClick(i) {
         const squares = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({squares: squares});
+        // Ternary conditional operator
+        // Flip the value of xIsNext so players can take turns
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+          squares: squares,
+          xIsNext: !this.state.xIsNext,
+        });
     }
 
     renderSquare(i) {
       // Pass a prop value called square to the Square
-      // Parthesis needed because of the multiple lines
+      /* Parthesis needed because of the multiple lines
+         so that JS doesn't insert a semicolon 
+         after return and break our code! */
       return (
         <Square 
             value={this.state.squares[i]} 
@@ -63,8 +75,8 @@ class Square extends React.Component {
     }
   
     render() {
-      const status = 'Next player: X';
-  
+      // Status is changed each turn 
+      const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
       return (
         <div>
           <div className="status">{status}</div>
