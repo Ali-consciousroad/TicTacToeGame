@@ -17,26 +17,7 @@ import './index.css';
     // Define the handleClick method
     /* update the Board's handleClick function to flip 
        the value of xIsNext */
-    // handleCLick component is moved (from the Board component) to the Game component   
-    handleClick(i) {
-        const history = this.state.history;
-        const current = history[history.length -1];
-        const squares = current.squares.slice();
-        // Click is ignored if someone has won or if a square is already filled
-        if (calculateWinner(squares) || squares[i]){
-          return;
-        }
-        // Ternary conditional operator
-        // Flip the value of xIsNext so players can take turns
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-          // Unlike the push() method, concat() doesn't mutate the orginal array 
-          history: history.concat([{
-            squares: squares,
-          }]),
-          xIsNext: !this.state.xIsNext,
-        });
-    }
+    
 
     renderSquare(i) {
       // Pass a prop value called square to the Square
@@ -87,18 +68,39 @@ import './index.css';
       super(props);
       this.state = {
         history: [{
-          squares: Array(9).fill(null),
+          squares: Array(9).fill(null)
         }],
-        xIsNext: true,
+        xIsNext: true
       };
     }
+
+    // handleCLick component is moved (from the Board component) to the Game component   
+    handleClick(i) {
+      const history = this.state.history;
+      const current = history[history.length -1];
+      const squares = current.squares.slice();
+      // Click is ignored if someone has won or if a square is already filled
+      if (calculateWinner(squares) || squares[i]){
+        return;
+      }
+      // Ternary conditional operator
+      // Flip the value of xIsNext so players can take turns
+      squares[i] = this.state.xIsNext ? 'X' : 'O';
+      this.setState({
+        // Unlike the push() method, concat() doesn't mutate the orginal array 
+        history: history.concat([{
+          squares: squares
+        }]),
+        xIsNext: !this.state.xIsNext,
+      });
+  }
 
     render() {
       // Status is changed each turn 
       // Check if one player has won the game
       const history = this.state.history;
       const current = history[history.length -1];
-      const winner = calculateWinner(this.state.squares);
+      const winner = calculateWinner(current.squares);
       let status;
       if(winner){
         status = 'Winner: ' + winner;
