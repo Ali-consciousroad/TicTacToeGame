@@ -70,13 +70,16 @@ import './index.css';
         history: [{
           squares: Array(9).fill(null)
         }],
+        // Used to indicate which step we're currently 
+        stepNumber: 0, 
         xIsNext: true
       };
     }
 
     // handleCLick component is moved (from the Board component) to the Game component   
     handleClick(i) {
-      const history = this.state.history;
+      // Ensure that if we go back in time, all the "future" history now incorrect
+      const history = this.state.history.slice(0, this.state.stepNumber +1);
       const current = history[history.length -1];
       const squares = current.squares.slice();
       // Click is ignored if someone has won or if a square is already filled
@@ -91,15 +94,28 @@ import './index.css';
         history: history.concat([{
           squares: squares
         }]),
+        // Ensure we don't get stuck showing the same move when a new move has been made
+        stepNumber: history.length,
         xIsNext: !this.state.xIsNext,
       });
-  }
+    }
+
+    /* Update stepNumber */
+    jumpTo(step) {
+      this.setState({
+        stepNumber: step, 
+        // set xIsNext to true if the number is even 
+        xIsNext: (step % 2) === 0,
+      });
+    }
 
     render() {
       // Status is changed each turn 
       // Check if one player has won the game
       const history = this.state.history;
-      const current = history[history.length -1];
+      // const current = history[history.length -1];
+      // Render the current selected move instead of the last move
+      const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
 
       // map over the history
@@ -108,8 +124,9 @@ import './index.css';
         'Go to move #' +move :
         'Go to game start';
         return (
-          <li>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <li key={move}>
+            <button onClick={() => this.jumpTo(move)}>{desc}
+            </button>
           </li>
         );
       });
